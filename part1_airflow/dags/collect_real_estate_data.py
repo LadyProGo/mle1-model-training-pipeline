@@ -11,10 +11,10 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 POSTGRES_CONN_ID = os.getenv("POSTGRES_CONN_ID", "destination_db")
 TARGET_TABLE = "mle1_real_estate_dataset"
 
-TMP_DIR = Path(os.getenv("AIRFLOW_TMP_DIR", "/tmp/real_estate_airflow"))
-BUILDINGS_PATH = TMP_DIR / "buildings.csv"
-FLATS_PATH = TMP_DIR / "flats.csv"
-DATASET_PATH = TMP_DIR / "real_estate_dataset.csv"
+TMP_DIR = Path(os.getenv("AIRFLOW_TMP_DIR", "/tmp/mle1_real_estate_airflow"))
+BUILDINGS_PATH = TMP_DIR / "mle1_buildings.csv"
+FLATS_PATH = TMP_DIR / "mle1_flats.csv"
+DATASET_PATH = TMP_DIR / "mle1_real_estate_dataset.csv"
 
 TARGET_COLUMNS = [
     "flat_id",
@@ -39,7 +39,7 @@ TARGET_COLUMNS = [
 
 
 with DAG(
-    dag_id="collect_real_estate_data",
+    dag_id="mle1_collect_real_estate_data",
     description="Collect raw real estate data from PostgreSQL source tables.",
     start_date=datetime(2026, 1, 1),
     schedule=None,
