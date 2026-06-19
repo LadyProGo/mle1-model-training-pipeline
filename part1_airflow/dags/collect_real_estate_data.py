@@ -9,7 +9,7 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 
 POSTGRES_CONN_ID = os.getenv("POSTGRES_CONN_ID", "destination_db")
-TARGET_TABLE = "real_estate_dataset"
+TARGET_TABLE = "mle1_real_estate_dataset"
 
 TMP_DIR = Path(os.getenv("AIRFLOW_TMP_DIR", "/tmp/real_estate_airflow"))
 BUILDINGS_PATH = TMP_DIR / "buildings.csv"
