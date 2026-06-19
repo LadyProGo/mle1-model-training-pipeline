@@ -31,3 +31,8 @@ part2_dvc/mlruns/
 
 .DS_Store
 Thumbs.db
+
+part1_airflow/airflow.cfg
+part1_airflow/airflow.db
+part1_airflow/webserver_config.py
+part1_airflow/standalone_admin_password.txt
