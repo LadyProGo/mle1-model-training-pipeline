@@ -80,10 +80,12 @@ with DAG(
         TMP_DIR.mkdir(parents=True, exist_ok=True)
 
         postgres_hook = PostgresHook(postgres_conn_id=POSTGRES_CONN_ID)
-        engine = postgres_hook.get_sqlalchemy_engine()
+        connection = postgres_hook.get_conn()
 
-        buildings = pd.read_sql("SELECT * FROM buildings;", engine)
-        flats = pd.read_sql("SELECT * FROM flats;", engine)
+        buildings = pd.read_sql("SELECT * FROM buildings;", connection)
+        flats = pd.read_sql("SELECT * FROM flats;", connection)
+
+        connection.close()
 
         buildings.to_csv(BUILDINGS_PATH, index=False)
         flats.to_csv(FLATS_PATH, index=False)
@@ -111,18 +113,16 @@ with DAG(
     def load() -> None:
         dataset = pd.read_csv(DATASET_PATH)
 
+        dataset = dataset.astype(object).where(pd.notna(dataset), None)
+
         postgres_hook = PostgresHook(postgres_conn_id=POSTGRES_CONN_ID)
-        engine = postgres_hook.get_sqlalchemy_engine()
 
         postgres_hook.run(f"TRUNCATE TABLE {TARGET_TABLE};")
-
-        dataset.to_sql(
-            TARGET_TABLE,
-            engine,
-            if_exists="append",
-            index=False,
-            chunksize=1000,
-            method="multi",
+        postgres_hook.insert_rows(
+            table=TARGET_TABLE,
+            rows=dataset.itertuples(index=False, name=None),
+            target_fields=TARGET_COLUMNS,
+            commit_every=1000,
         )
 
     create_table() >> extract() >> transform() >> load()
