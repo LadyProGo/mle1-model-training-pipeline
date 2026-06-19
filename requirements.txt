@@ -1,0 +1,15 @@
+apache-airflow==2.7.3
+SQLAlchemy<2.0
+
+pandas
+numpy
+scikit-learn
+joblib
+PyYAML
+psycopg2-binary
+python-dotenv
+requests
+
+dvc
+dvc-s3
+boto3
