@@ -15,6 +15,7 @@ TARGET_TABLE = "real_estate_dataset"
 TMP_DIR = Path(os.getenv("AIRFLOW_TMP_DIR", "/tmp/real_estate_airflow"))
 BUILDINGS_PATH = TMP_DIR / "buildings.csv"
 FLATS_PATH = TMP_DIR / "flats.csv"
+DATASET_PATH = TMP_DIR / "real_estate_dataset.csv"
 
 
 with DAG(
@@ -67,7 +68,24 @@ with DAG(
         buildings.to_csv(BUILDINGS_PATH, index=False)
         flats.to_csv(FLATS_PATH, index=False)
 
-    transform = EmptyOperator(task_id="transform")
+    @task(task_id="transform")
+    def transform() -> None:
+        buildings = pd.read_csv(BUILDINGS_PATH)
+        flats = pd.read_csv(FLATS_PATH)
+
+        dataset = flats.merge(
+            buildings,
+            left_on="building_id",
+            right_on="id",
+            how="inner",
+            suffixes=("_flat", "_building"),
+        )
+
+        dataset = dataset.rename(columns={"id_flat": "flat_id"})
+        dataset = dataset.drop(columns=["id_building"])
+
+        dataset.to_csv(DATASET_PATH, index=False)
+
     load = EmptyOperator(task_id="load")
 
-    create_table() >> extract() >> transform >> load
+    create_table() >> extract() >> transform() >> load
