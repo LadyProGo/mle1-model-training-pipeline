@@ -5,7 +5,6 @@ from pathlib import Path
 import pandas as pd
 from airflow import DAG
 from airflow.decorators import task
-from airflow.operators.empty import EmptyOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 
@@ -16,6 +15,27 @@ TMP_DIR = Path(os.getenv("AIRFLOW_TMP_DIR", "/tmp/real_estate_airflow"))
 BUILDINGS_PATH = TMP_DIR / "buildings.csv"
 FLATS_PATH = TMP_DIR / "flats.csv"
 DATASET_PATH = TMP_DIR / "real_estate_dataset.csv"
+
+TARGET_COLUMNS = [
+    "flat_id",
+    "building_id",
+    "floor",
+    "kitchen_area",
+    "living_area",
+    "rooms",
+    "is_apartment",
+    "studio",
+    "total_area",
+    "price",
+    "build_year",
+    "building_type_int",
+    "latitude",
+    "longitude",
+    "ceiling_height",
+    "flats_count",
+    "floors_total",
+    "has_elevator",
+]
 
 
 with DAG(
@@ -83,9 +103,26 @@ with DAG(
 
         dataset = dataset.rename(columns={"id_flat": "flat_id"})
         dataset = dataset.drop(columns=["id_building"])
+        dataset = dataset[TARGET_COLUMNS]
 
         dataset.to_csv(DATASET_PATH, index=False)
 
-    load = EmptyOperator(task_id="load")
+    @task(task_id="load")
+    def load() -> None:
+        dataset = pd.read_csv(DATASET_PATH)
 
-    create_table() >> extract() >> transform() >> load
+        postgres_hook = PostgresHook(postgres_conn_id=POSTGRES_CONN_ID)
+        engine = postgres_hook.get_sqlalchemy_engine()
+
+        postgres_hook.run(f"TRUNCATE TABLE {TARGET_TABLE};")
+
+        dataset.to_sql(
+            TARGET_TABLE,
+            engine,
+            if_exists="append",
+            index=False,
+            chunksize=1000,
+            method="multi",
+        )
+
+    create_table() >> extract() >> transform() >> load()
