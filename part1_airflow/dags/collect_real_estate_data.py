@@ -6,6 +6,7 @@ import pandas as pd
 from airflow import DAG
 from airflow.decorators import task
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from steps.messages import send_telegram_failure_message, send_telegram_success_message
 
 
 POSTGRES_CONN_ID = os.getenv("POSTGRES_CONN_ID", "destination_db")
@@ -45,6 +46,8 @@ with DAG(
     schedule=None,
     catchup=False,
     tags=["real_estate", "data_collection"],
+    on_success_callback=send_telegram_success_message,
+    on_failure_callback=send_telegram_failure_message,
 ) as dag:
 
     @task(task_id="create_table")
