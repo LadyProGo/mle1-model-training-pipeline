@@ -23,3 +23,12 @@ stages:
     - part2_dvc/scripts/train_model.py
     outs:
     - part2_dvc/models/random_forest_model.joblib
+  evaluate_model:
+    cmd: python3 part2_dvc/scripts/evaluate_model.py
+    deps:
+    - part2_dvc/data/X_test.csv
+    - part2_dvc/data/y_test.csv
+    - part2_dvc/models/random_forest_model.joblib
+    - part2_dvc/scripts/evaluate_model.py
+    outs:
+    - part2_dvc/cv_results/metrics.json

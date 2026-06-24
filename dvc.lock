@@ -60,3 +60,27 @@ stages:
       hash: md5
       md5: a80a0ee2b14d1783fb49cc58622d10cd
       size: 160566833
+  evaluate_model:
+    cmd: python3 part2_dvc/scripts/evaluate_model.py
+    deps:
+    - path: part2_dvc/data/X_test.csv
+      hash: md5
+      md5: 39a4a0a18438cccc9649a5492a5b764b
+      size: 2575523
+    - path: part2_dvc/data/y_test.csv
+      hash: md5
+      md5: 6f79c3800ed2c97f96b69cd268a6141b
+      size: 376822
+    - path: part2_dvc/models/random_forest_model.joblib
+      hash: md5
+      md5: a80a0ee2b14d1783fb49cc58622d10cd
+      size: 160566833
+    - path: part2_dvc/scripts/evaluate_model.py
+      hash: md5
+      md5: d87682474d70bbad796f0efc66d3290f
+      size: 1663
+    outs:
+    - path: part2_dvc/cv_results/metrics.json
+      hash: md5
+      md5: df14b4b744f451be8217d99d91203347
+      size: 94
