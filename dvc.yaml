@@ -1,0 +1,7 @@
+stages:
+  load_data:
+    cmd: python3 part2_dvc/scripts/load_data.py
+    deps:
+    - part2_dvc/scripts/load_data.py
+    outs:
+    - part2_dvc/data/clean_real_estate_dataset.csv

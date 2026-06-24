@@ -1,0 +1,14 @@
+schema: '2.0'
+stages:
+  load_data:
+    cmd: python3 part2_dvc/scripts/load_data.py
+    deps:
+    - path: part2_dvc/scripts/load_data.py
+      hash: md5
+      md5: 1825b674f017a4795d73810e625d49e5
+      size: 1327
+    outs:
+    - path: part2_dvc/data/clean_real_estate_dataset.csv
+      hash: md5
+      md5: 72cf974056e7d1b97e2b4e28ca261918
+      size: 13485547
