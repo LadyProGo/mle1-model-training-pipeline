@@ -40,3 +40,23 @@ stages:
       hash: md5
       md5: 0a9f831944706f92b06ba2b22abf4b8f
       size: 1129642
+  train_model:
+    cmd: python3 part2_dvc/scripts/train_model.py
+    deps:
+    - path: part2_dvc/data/X_train.csv
+      hash: md5
+      md5: 1543c350d1645ffcda6b206f09a8f209
+      size: 7727128
+    - path: part2_dvc/data/y_train.csv
+      hash: md5
+      md5: 0a9f831944706f92b06ba2b22abf4b8f
+      size: 1129642
+    - path: part2_dvc/scripts/train_model.py
+      hash: md5
+      md5: 1b21a03ce9175376ad295177457cc7e5
+      size: 1263
+    outs:
+    - path: part2_dvc/models/random_forest_model.joblib
+      hash: md5
+      md5: a80a0ee2b14d1783fb49cc58622d10cd
+      size: 160566833

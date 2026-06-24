@@ -15,3 +15,11 @@ stages:
     - part2_dvc/data/X_train.csv
     - part2_dvc/data/y_test.csv
     - part2_dvc/data/y_train.csv
+  train_model:
+    cmd: python3 part2_dvc/scripts/train_model.py
+    deps:
+    - part2_dvc/data/X_train.csv
+    - part2_dvc/data/y_train.csv
+    - part2_dvc/scripts/train_model.py
+    outs:
+    - part2_dvc/models/random_forest_model.joblib
