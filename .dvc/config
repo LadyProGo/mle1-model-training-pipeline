@@ -1,0 +1,5 @@
+[core]
+    remote = storage
+['remote "storage"']
+    url = s3://s3-student-mle-20260520-06bc941798-freetrack/mle1-model-training-pipeline
+    endpointurl = https://storage.yandexcloud.net
