@@ -5,3 +5,13 @@ stages:
     - part2_dvc/scripts/load_data.py
     outs:
     - part2_dvc/data/clean_real_estate_dataset.csv
+  split_data:
+    cmd: python3 part2_dvc/scripts/split_data.py
+    deps:
+    - part2_dvc/data/clean_real_estate_dataset.csv
+    - part2_dvc/scripts/split_data.py
+    outs:
+    - part2_dvc/data/X_test.csv
+    - part2_dvc/data/X_train.csv
+    - part2_dvc/data/y_test.csv
+    - part2_dvc/data/y_train.csv

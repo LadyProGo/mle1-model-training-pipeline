@@ -12,3 +12,31 @@ stages:
       hash: md5
       md5: 72cf974056e7d1b97e2b4e28ca261918
       size: 13485547
+  split_data:
+    cmd: python3 part2_dvc/scripts/split_data.py
+    deps:
+    - path: part2_dvc/data/clean_real_estate_dataset.csv
+      hash: md5
+      md5: 72cf974056e7d1b97e2b4e28ca261918
+      size: 13485547
+    - path: part2_dvc/scripts/split_data.py
+      hash: md5
+      md5: c13d81efe9908b4880b9b272161083d0
+      size: 1650
+    outs:
+    - path: part2_dvc/data/X_test.csv
+      hash: md5
+      md5: 39a4a0a18438cccc9649a5492a5b764b
+      size: 2575523
+    - path: part2_dvc/data/X_train.csv
+      hash: md5
+      md5: 1543c350d1645ffcda6b206f09a8f209
+      size: 7727128
+    - path: part2_dvc/data/y_test.csv
+      hash: md5
+      md5: 6f79c3800ed2c97f96b69cd268a6141b
+      size: 376822
+    - path: part2_dvc/data/y_train.csv
+      hash: md5
+      md5: 0a9f831944706f92b06ba2b22abf4b8f
+      size: 1129642
