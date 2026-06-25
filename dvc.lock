@@ -21,8 +21,16 @@ stages:
       size: 13485547
     - path: part2_dvc/scripts/split_data.py
       hash: md5
-      md5: c13d81efe9908b4880b9b272161083d0
-      size: 1650
+      md5: 9eac7587ccb187c156cf92d59ff620f6
+      size: 2011
+    params:
+      params.yaml:
+        data.drop_columns:
+        - flat_id
+        - building_id
+        data.target_column: price
+        split.random_state: 42
+        split.test_size: 0.25
     outs:
     - path: part2_dvc/data/X_test.csv
       hash: md5
@@ -53,8 +61,15 @@ stages:
       size: 1129642
     - path: part2_dvc/scripts/train_model.py
       hash: md5
-      md5: 1b21a03ce9175376ad295177457cc7e5
-      size: 1263
+      md5: 119f5ecc0d732c19e86ba3a64936bbbe
+      size: 1626
+    params:
+      params.yaml:
+        model.max_depth: 20
+        model.n_estimators: 50
+        model.n_jobs: -1
+        model.random_state: 42
+        model.type: RandomForestRegressor
     outs:
     - path: part2_dvc/models/random_forest_model.joblib
       hash: md5

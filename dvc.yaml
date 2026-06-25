@@ -5,24 +5,38 @@ stages:
     - part2_dvc/scripts/load_data.py
     outs:
     - part2_dvc/data/clean_real_estate_dataset.csv
+
   split_data:
     cmd: python3 part2_dvc/scripts/split_data.py
     deps:
     - part2_dvc/data/clean_real_estate_dataset.csv
     - part2_dvc/scripts/split_data.py
+    params:
+    - data.target_column
+    - data.drop_columns
+    - split.test_size
+    - split.random_state
     outs:
     - part2_dvc/data/X_test.csv
     - part2_dvc/data/X_train.csv
     - part2_dvc/data/y_test.csv
     - part2_dvc/data/y_train.csv
+
   train_model:
     cmd: python3 part2_dvc/scripts/train_model.py
     deps:
     - part2_dvc/data/X_train.csv
     - part2_dvc/data/y_train.csv
     - part2_dvc/scripts/train_model.py
+    params:
+    - model.type
+    - model.n_estimators
+    - model.max_depth
+    - model.random_state
+    - model.n_jobs
     outs:
     - part2_dvc/models/random_forest_model.joblib
+
   evaluate_model:
     cmd: python3 part2_dvc/scripts/evaluate_model.py
     deps:
